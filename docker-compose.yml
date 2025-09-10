@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Serviço da aplicação Go
+  app:
+    build: .
+    container_name: livrariago-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=admin
+      - DB_NAME=livraria
+      - DB_PORT=5432
+    networks:
+      - livrariago-network
+    restart: unless-stopped
+
+  # Serviço do PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: livrariago-postgres
+    environment:
+      POSTGRES_DB: livraria
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - livrariago-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  livrariago-network:
+    driver: bridge
