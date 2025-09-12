@@ -86,6 +86,44 @@ func ReadById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
+func ReadByNome(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	nome := r.URL.Query().Get("nome")
+
+	rows, err := Db.Db.Query("SELECT * FROM clientes WHERE nome=$1", nome)
+	if err != nil {
+		fmt.Println("Server failed to handler = ", err)
+		return
+	}
+
+	defer rows.Close()
+
+	data := make([]Models.Cliente, 0)
+
+	for rows.Next() {
+		clientes := Models.Cliente{}
+		err := rows.Scan(&clientes.Id, &clientes.Nome, &clientes.Email, &clientes.Telefone, &clientes.Cpf, &clientes.Endereco, &clientes.DataNascimento, &clientes.DataCadastro, &clientes.Ativo)
+		if err != nil {
+			fmt.Println("Server failed to handler = ", err)
+			return
+		}
+
+		data = append(data, clientes)
+	}
+
+	if err = rows.Err(); err != nil {
+		fmt.Println("Server failed to handler = ", err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(data)
+}
+
 func Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
