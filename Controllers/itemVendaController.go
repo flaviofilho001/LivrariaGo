@@ -1,3 +1,4 @@
+// Controllers/ItemVendaController.go
 package Controllers
 
 import (
@@ -7,39 +8,44 @@ import (
 	"livrariago/Db"
 	"livrariago/Models"
 	"net/http"
-	"time"
+
+	"github.com/shopspring/decimal"
 )
 
-// função para ler as pessoas na tabela
+// função para ler todos os itens de venda
 func ReadItemVenda(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
-	rows, err := Db.Db.Query("SELECT * FROM clientes")
+	rows, err := Db.Db.Query("SELECT id, venda_id, livro_id, quantidade, preco_unitario, subtotal, desconto FROM itens_venda")
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
 	defer rows.Close()
 
-	data := make([]Models.Cliente, 0)
+	data := make([]Models.ItemVenda, 0)
 
 	for rows.Next() {
-		clientes := Models.Cliente{}
-		err := rows.Scan(&clientes.Id, &clientes.Nome, &clientes.Email, &clientes.Telefone, &clientes.Cpf, &clientes.Endereco, &clientes.DataNascimento, &clientes.DataCadastro, &clientes.Ativo)
+		item := Models.ItemVenda{}
+		err := rows.Scan(&item.Id, &item.VendaId, &item.LivroId, &item.Quantidade,
+			&item.PrecoUnitario, &item.Subtotal, &item.Desconto)
 		if err != nil {
 			fmt.Println("Server failed to handler = ", err)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 			return
 		}
 
-		data = append(data, clientes)
+		data = append(data, item)
 	}
 
 	if err = rows.Err(); err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
@@ -47,7 +53,7 @@ func ReadItemVenda(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
-// função para ler uma pessoa na tabela
+// função para ler um item de venda por ID
 func ReadByIdItemVenda(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
@@ -56,29 +62,33 @@ func ReadByIdItemVenda(w http.ResponseWriter, r *http.Request) {
 
 	id := r.URL.Query().Get("id")
 
-	rows, err := Db.Db.Query("SELECT * FROM clientes WHERE id=$1", id)
+	rows, err := Db.Db.Query("SELECT id, venda_id, livro_id, quantidade, preco_unitario, subtotal, desconto FROM itens_venda WHERE id=$1", id)
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
 	defer rows.Close()
 
-	data := make([]Models.Cliente, 0)
+	data := make([]Models.ItemVenda, 0)
 
 	for rows.Next() {
-		clientes := Models.Cliente{}
-		err := rows.Scan(&clientes.Id, &clientes.Nome, &clientes.Email, &clientes.Telefone, &clientes.Cpf, &clientes.Endereco, &clientes.DataNascimento, &clientes.DataCadastro, &clientes.Ativo)
+		item := Models.ItemVenda{}
+		err := rows.Scan(&item.Id, &item.VendaId, &item.LivroId, &item.Quantidade,
+			&item.PrecoUnitario, &item.Subtotal, &item.Desconto)
 		if err != nil {
 			fmt.Println("Server failed to handler = ", err)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 			return
 		}
 
-		data = append(data, clientes)
+		data = append(data, item)
 	}
 
 	if err = rows.Err(); err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
@@ -86,37 +96,42 @@ func ReadByIdItemVenda(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
-func ReadByNomeItemVenda(w http.ResponseWriter, r *http.Request) {
+// função para ler itens de venda por venda_id
+func ReadByVendaIdItemVenda(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
-	nome := r.URL.Query().Get("nome")
+	vendaId := r.URL.Query().Get("venda_id")
 
-	rows, err := Db.Db.Query("SELECT * FROM clientes WHERE nome=$1", nome)
+	rows, err := Db.Db.Query("SELECT id, venda_id, livro_id, quantidade, preco_unitario, subtotal, desconto FROM itens_venda WHERE venda_id=$1", vendaId)
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
 	defer rows.Close()
 
-	data := make([]Models.Cliente, 0)
+	data := make([]Models.ItemVenda, 0)
 
 	for rows.Next() {
-		clientes := Models.Cliente{}
-		err := rows.Scan(&clientes.Id, &clientes.Nome, &clientes.Email, &clientes.Telefone, &clientes.Cpf, &clientes.Endereco, &clientes.DataNascimento, &clientes.DataCadastro, &clientes.Ativo)
+		item := Models.ItemVenda{}
+		err := rows.Scan(&item.Id, &item.VendaId, &item.LivroId, &item.Quantidade,
+			&item.PrecoUnitario, &item.Subtotal, &item.Desconto)
 		if err != nil {
 			fmt.Println("Server failed to handler = ", err)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 			return
 		}
 
-		data = append(data, clientes)
+		data = append(data, item)
 	}
 
 	if err = rows.Err(); err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
@@ -124,36 +139,93 @@ func ReadByNomeItemVenda(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
+// função para ler itens de venda por livro_id
+func ReadByLivroIdItemVenda(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	livroId := r.URL.Query().Get("livro_id")
+
+	rows, err := Db.Db.Query("SELECT id, venda_id, livro_id, quantidade, preco_unitario, subtotal, desconto FROM itens_venda WHERE livro_id=$1", livroId)
+	if err != nil {
+		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+
+	data := make([]Models.ItemVenda, 0)
+
+	for rows.Next() {
+		item := Models.ItemVenda{}
+		err := rows.Scan(&item.Id, &item.VendaId, &item.LivroId, &item.Quantidade,
+			&item.PrecoUnitario, &item.Subtotal, &item.Desconto)
+		if err != nil {
+			fmt.Println("Server failed to handler = ", err)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			return
+		}
+
+		data = append(data, item)
+	}
+
+	if err = rows.Err(); err != nil {
+		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(data)
+}
+
+// função para criar um novo item de venda
 func CreateItemVenda(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
-	c := Models.Cliente{}
-	err := json.NewDecoder(r.Body).Decode(&c)
+	item := Models.ItemVenda{}
+	err := json.NewDecoder(r.Body).Decode(&item)
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
-		return
-	}
-	c.DataCadastro = time.Now()
-	t, err := time.Parse("2006-01-02", c.DataNascimento)
-	if err != nil {
-		fmt.Println("Erro ao converter data:", err)
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
 
-	_, err = Db.Db.Exec("INSERT INTO clientes (nome,email,telefone,cpf,endereco,dataNascimento,dataCadastro,ativo) VALUES ($1, $2, $3,$4,$5,$6,$7,$8)", c.Nome, c.Email, c.Telefone, c.Cpf, c.Endereco, t, c.DataCadastro, c.Ativo)
+	// Validações básicas
+	if item.VendaId <= 0 || item.LivroId <= 0 || item.Quantidade <= 0 || item.PrecoUnitario.LessThanOrEqual(decimal.Zero) {
+		http.Error(w, "Dados inválidos", http.StatusBadRequest)
+		return
+	}
+
+	// Calcular subtotal se não foi fornecido
+	if item.Subtotal.IsZero() {
+		desconto := item.Desconto.Div(decimal.NewFromInt(100)) // Converter porcentagem para decimal
+		item.Subtotal = item.PrecoUnitario.Mul(decimal.NewFromInt(int64(item.Quantidade))).Mul(decimal.NewFromInt(1).Sub(desconto))
+	}
+
+	_, err = Db.Db.Exec(`
+		INSERT INTO itens_venda (venda_id, livro_id, quantidade, preco_unitario, subtotal, desconto) 
+		VALUES ($1, $2, $3, $4, $5, $6)`,
+		item.VendaId, item.LivroId, item.Quantidade, item.PrecoUnitario, item.Subtotal, item.Desconto)
+
+	fmt.Println("Item de venda recebido: ", item)
 
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, "Erro ao inserir item", http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
 }
 
-// função para atualizar uma pessoa na tabela
+// função para atualizar um item de venda
 func UpdateItemVenda(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "PUT" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
@@ -161,18 +233,20 @@ func UpdateItemVenda(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := r.URL.Query().Get("id")
-	up := Models.Cliente{}
+	up := Models.ItemVenda{}
 
 	err := json.NewDecoder(r.Body).Decode(&up)
-
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
 
-	row := Db.Db.QueryRow("SELECT * FROM clientes WHERE id = $1", id)
-	c := Models.Cliente{}
-	err = row.Scan(&c.Id, &c.Nome, &c.Email, &c.Telefone, &c.Cpf, &c.Endereco, &c.DataNascimento, &c.DataCadastro, &c.Ativo)
+	// Buscar o item atual
+	row := Db.Db.QueryRow("SELECT id, venda_id, livro_id, quantidade, preco_unitario, subtotal, desconto FROM itens_venda WHERE id = $1", id)
+	item := Models.ItemVenda{}
+	err = row.Scan(&item.Id, &item.VendaId, &item.LivroId, &item.Quantidade,
+		&item.PrecoUnitario, &item.Subtotal, &item.Desconto)
 
 	switch {
 	case err == sql.ErrNoRows:
@@ -183,40 +257,44 @@ func UpdateItemVenda(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if up.Nome != "" {
-		c.Nome = up.Nome
+	// Atualizar campos que foram fornecidos
+	if up.VendaId > 0 {
+		item.VendaId = up.VendaId
 	}
-	if up.Email != "" {
-		c.Email = up.Email
+	if up.LivroId > 0 {
+		item.LivroId = up.LivroId
 	}
-	if up.Telefone != "" {
-		c.Telefone = up.Telefone
+	if up.Quantidade > 0 {
+		item.Quantidade = up.Quantidade
 	}
-	if up.Cpf != "" {
-		c.Cpf = up.Cpf
+	if !up.PrecoUnitario.IsZero() {
+		item.PrecoUnitario = up.PrecoUnitario
 	}
-	if up.Endereco != "" {
-		c.Endereco = up.Endereco
-	}
-	if up.DataNascimento != "" { // só altera se não for "zero date"
-		c.DataNascimento = up.DataNascimento
-	}
-	if up.Ativo != c.Ativo { // bool não tem "vazio", então compara
-		c.Ativo = up.Ativo
+	if !up.Desconto.IsZero() {
+		item.Desconto = up.Desconto
 	}
 
-	_, err = Db.Db.Exec("UPDATE clientes SET nome = $1, email = $2,telefone = $3,cpf = $4 ,endereco = $5,dataNascimento = $6 ,dataCadastro = $7,ativo = $8 WHERE id=$9", c.Nome, c.Email, c.Telefone, c.Cpf, c.Endereco, c.DataNascimento, c.DataCadastro, c.Ativo, c.Id)
+	// Recalcular subtotal
+	desconto := item.Desconto.Div(decimal.NewFromInt(100))
+	item.Subtotal = item.PrecoUnitario.Mul(decimal.NewFromInt(int64(item.Quantidade))).Mul(decimal.NewFromInt(1).Sub(desconto))
+
+	_, err = Db.Db.Exec(`
+		UPDATE itens_venda 
+		SET venda_id = $1, livro_id = $2, quantidade = $3, preco_unitario = $4, subtotal = $5, desconto = $6 
+		WHERE id = $7`,
+		item.VendaId, item.LivroId, item.Quantidade, item.PrecoUnitario, item.Subtotal, item.Desconto, item.Id)
 
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(c)
+	json.NewEncoder(w).Encode(item)
 }
 
-// função para detetar uma pessoa na tabela
+// função para deletar um item de venda
 func DeleteItemVenda(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "DELETE" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
@@ -225,10 +303,11 @@ func DeleteItemVenda(w http.ResponseWriter, r *http.Request) {
 
 	id := r.URL.Query().Get("id")
 
-	_, err := Db.Db.Exec("DELETE FROM clientes WHERE id = $1 ", id)
+	_, err := Db.Db.Exec("DELETE FROM itens_venda WHERE id = $1", id)
 
 	if err != nil {
 		fmt.Println("Server failed to handler = ", err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 

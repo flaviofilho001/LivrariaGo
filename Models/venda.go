@@ -1,3 +1,4 @@
+// Models/Venda.go
 package Models
 
 import (
@@ -7,10 +8,11 @@ import (
 )
 
 type Venda struct {
-	id             int
-	clienteId      int
-	dataVenda      time.Time
-	valorTotal     decimal.Decimal
-	formaPagamento string
-	status         string
+	Id             int             `json:"id"`
+	ClienteId      int             `json:"cliente_id"`
+	DataVenda      time.Time       `json:"data_venda"`
+	ValorTotal     decimal.Decimal `json:"valor_total"`
+	FormaPagamento string          `json:"forma_pagamento"`
+	Status         string          `json:"status"`
+	Observacoes    string          `json:"observacoes"`
 }
