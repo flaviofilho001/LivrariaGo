@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var Db *sql.DB
+var Db *sql.DB //
 
 // função para iniciar o banco de dados, está pegando das variaveis de ambiente no docker os dados para a string de conexão
 func init() {

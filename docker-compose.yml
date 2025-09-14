@@ -4,7 +4,7 @@ services:
   # Serviço da aplicação Go
   app:
     build: .
-    container_name: livrariago-app
+    container_name: livrariago
     ports:
       - "8080:8080"
     depends_on:

@@ -19,6 +19,13 @@ func main() {
 	http.HandleFunc("/clientes/readid", Controllers.ReadById)
 	http.HandleFunc("/clientes/readnome", Controllers.ReadByNome)
 
+	http.HandleFunc("/categorias/update", Controllers.UpdateCategoria)
+	http.HandleFunc("/categorias/delete", Controllers.DeleteCategoria)
+	http.HandleFunc("/categorias/read", Controllers.ReadCategoria)
+	http.HandleFunc("/categorias/create", Controllers.CreateCategoria)
+	http.HandleFunc("/categorias/readid", Controllers.ReadByIdCategoria)
+	http.HandleFunc("/categorias/readnome", Controllers.ReadByNomeCategoria)
+
 	fmt.Println("Server is running on port 8080")
 
 	http.ListenAndServe(":8080", nil)
