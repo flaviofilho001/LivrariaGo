@@ -14,13 +14,14 @@ var Db *sql.DB //
 func init() {
 	var err error
 
-	// Usar variáveis de ambiente ou valores padrão
+	// Ele usa variáveis de ambiente caso for com docker e caso for pelo go run main.go ele utiliza as string "normais"
 	dbHost := getEnv("DB_HOST", "localhost")
 	dbUser := getEnv("DB_USER", "postgres")
 	dbPassword := getEnv("DB_PASSWORD", "admin")
 	dbName := getEnv("DB_NAME", "livraria")
 	dbPort := getEnv("DB_PORT", "5432")
 
+	//Vai concatenar as strings para criar a conexão com o banco de dados
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
 		dbUser, dbPassword, dbHost, dbPort, dbName)
 
