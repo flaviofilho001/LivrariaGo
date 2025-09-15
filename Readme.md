@@ -83,182 +83,196 @@ graph TD
 
 ---
 
-## 🎨 Modelagem UML
+# Diagrama de Classes UML - Sistema de Livraria
 
-### Diagrama de Classes Completo
+## 📋 Modelagem UML
 
-┌─────────────────────────────────┐
-│            Categoria            │
-├─────────────────────────────────┤
-│ - id : int                      │
-│ - nome : string                 │
-├─────────────────────────────────┤
-│ + CreateCategoria() : Response  │
-│ + ReadCategoria() : List        │
-│ + ReadByIdCategoria() : Category│
-│ + ReadByNomeCategoria() : List  │
-│ + UpdateCategoria() : Response  │
-│ + DeleteCategoria() : Response  │
-│ + validarNome() : boolean       │
-│ + obterLivros() : List<Livro>   │
-│ + contarLivros() : int          │
-└─────────────────────────────────┘
+```
+┌─────────────────────────────────────────────────────┐
+│                     Categoria                       │
+├─────────────────────────────────────────────────────┤
+│ - id : int                                          │
+│ - nome : string                                     │
+├─────────────────────────────────────────────────────┤
+│ + CreateCategoria() : Response                      │
+│ + ReadCategoria() : List                            │
+│ + ReadByIdCategoria() : Category                    │
+│ + ReadByNomeCategoria() : List                      │
+│ + UpdateCategoria() : Response                      │
+│ + DeleteCategoria() : Response                      │
+│ + validarNome() : boolean                           │
+│ + obterLivros() : List                              │
+│ + contarLivros() : int                              │
+└─────────────────────────────────────────────────────┘
+                           │
+                           │ 1
+                           │
+                           │ *
+┌─────────────────────────────────────────────────────┐
+│                       Livro                         │
+├─────────────────────────────────────────────────────┤
+│ - id : int                                          │
+│ - titulo : string                                   │
+│ - autor : string                                    │
+│ - isbn : string                                     │
+│ - preco : decimal                                   │
+│ - quantidadeEstoque : int                           │
+│ - categoria : string                                │
+│ - editora : string                                  │
+│ - anoPublicacao : int                               │
+│ - dataUltimaAtualizacao : DateTime                  │
+│ - ativo : boolean                                   │
+│ - sinopse : string                                  │
+├─────────────────────────────────────────────────────┤
+│ + CreateLivro() : Response                          │
+│ + ReadLivro() : List                                │
+│ + ReadByIdLivro() : Livro                           │
+│ + ReadByTituloLivro() : List                        │
+│ + ReadByAutorLivro() : List                         │
+│ + ReadByCategoriaLivro() : List                     │
+│ + ReadEstoqueBaixoLivro() : List                    │
+│ + UpdateLivro() : Response                          │
+│ + UpdateEstoqueLivro() : Response                   │
+│ + DeleteLivro() : Response                          │
+│ + validarISBN() : boolean                           │
+│ + validarPreco() : boolean                          │
+│ + validarAnoPublicacao() : boolean                  │
+│ + atualizarEstoque() : boolean                      │
+│ + verificarDisponibilidade() : boolean              │
+│ + calcularValorEstoque() : decimal                  │
+│ + obterNivelEstoque() : string                      │
+│ + aplicarDesconto() : decimal                       │
+│ + gerarEtiqueta() : string                          │
+└─────────────────────────────────────────────────────┘
+                           │
+                           │ 1
+                           │
+                           │ *
+┌─────────────────────────────────────────────────────┐
+│                    ItemVenda                        │
+├─────────────────────────────────────────────────────┤
+│ - id : int                                          │
+│ - vendaId : int                                     │
+│ - livroId : int                                     │
+│ - quantidade : int                                  │
+│ - precoUnitario : decimal                           │
+│ - subtotal : decimal                                │
+│ - desconto : decimal                                │
+├─────────────────────────────────────────────────────┤
+│ + CreateItemVenda() : Response                      │
+│ + ReadItemVenda() : List                            │
+│ + ReadByIdItemVenda() : ItemVenda                   │
+│ + ReadByVendaIdItemVenda() : List                   │
+│ + ReadByLivroIdItemVenda() : List                   │
+│ + UpdateItemVenda() : Response                      │
+│ + DeleteItemVenda() : Response                      │
+│ + calcularSubtotal() : decimal                      │
+│ + validarQuantidade() : boolean                     │
+│ + aplicarDesconto() : void                          │
+│ + obterTotal() : decimal                            │
+└─────────────────────────────────────────────────────┘
+                           │
+                           │ *
+                           │
+                           │ 1
+┌─────────────────────────────────────────────────────┐
+│                       Venda                         │
+├─────────────────────────────────────────────────────┤
+│ - id : int                                          │
+│ - clienteId : int                                   │
+│ - dataVenda : DateTime                              │
+│ - valorTotal : decimal                              │
+│ - formaPagamento : string                           │
+│ - status : string                                   │
+│ - observacoes : string                              │
+├─────────────────────────────────────────────────────┤
+│ + CreateVenda() : Response                          │
+│ + ReadVenda() : List                                │
+│ + ReadByIdVenda() : Venda                           │
+│ + ReadByClienteIdVenda() : List                     │
+│ + ReadByStatusVenda() : List                        │
+│ + ReadByPeriodoVenda() : List                       │
+│ + UpdateVenda() : Response                          │
+│ + ConfirmarVenda() : Response                       │
+│ + CancelarVenda() : Response                        │
+│ + DeleteVenda() : Response                          │
+│ + RelatorioVendas() : Relatorio                     │
+│ + validarFormaPagamento() : boolean                 │
+│ + validarStatus() : boolean                         │
+│ + calcularTotal() : decimal                         │
+│ + adicionarItem() : boolean                         │
+│ + removerItem() : boolean                           │
+│ + confirmar() : boolean                             │
+│ + cancelar() : boolean                              │
+│ + estornar() : boolean                              │
+│ + gerarComprovante() : string                       │
+│ + enviarEmailConfirmacao() : boolean                │
+└─────────────────────────────────────────────────────┘
+                           │
+                           │ *
+                           │
+                           │ 1
+┌─────────────────────────────────────────────────────┐
+│                      Cliente                        │
+├─────────────────────────────────────────────────────┤
+│ - id : int                                          │
+│ - nome : string                                     │
+│ - email : string                                    │
+│ - telefone : string                                 │
+│ - cpf : string                                      │
+│ - endereco : string                                 │
+│ - dataNascimento : Date                             │
+│ - dataCadastro : DateTime                           │
+│ - ativo : boolean                                   │
+├─────────────────────────────────────────────────────┤
+│ + Create() : Response                               │
+│ + Read() : List                                     │
+│ + ReadById() : Cliente                              │
+│ + ReadByNome() : List                               │
+│ + Update() : Response                               │
+│ + Delete() : Response                               │
+│ + validarCPF() : boolean                            │
+│ + validarEmail() : boolean                          │
+│ + calcularIdade() : int                             │
+│ + formatarCPF() : string                            │
+│ + ativar() : void                                   │
+│ + desativar() : void                                │
+│ + obterHistoricoCompras() : List                    │
+│ + calcularTicketMedio() : decimal                   │
+└─────────────────────────────────────────────────────┘
+```
 
-┌─────────────────────────────────┐
-│              Cliente            │
-├─────────────────────────────────┤
-│ - id : int                      │
-│ - nome : string                 │
-│ - email : string                │
-│ - telefone : string             │
-│ - cpf : string                  │
-│ - endereco : string             │
-│ - dataNascimento : Date         │
-│ - dataCadastro : DateTime       │
-│ - ativo : boolean               │
-├─────────────────────────────────┤
-│ + Create() : Response           │
-│ + Read() : List<Cliente>        │
-│ + ReadById() : Cliente          │
-│ + ReadByNome() : List<Cliente>  │
-│ + Update() : Response           │
-│ + Delete() : Response           │
-│ + validarCPF() : boolean        │
-│ + validarEmail() : boolean      │
-│ + calcularIdade() : int         │
-│ + formatarCPF() : string        │
-│ + ativar() : void               │
-│ + desativar() : void            │
-│ + obterHistoricoCompras() : List│
-│ + calcularTicketMedio() : decimal│
-└─────────────────────────────────┘
+## 🔗 Diagrama de Relacionamentos
 
-┌─────────────────────────────────┐
-│              Livro              │
-├─────────────────────────────────┤
-│ - id : int                      │
-│ - titulo : string               │
-│ - autor : string                │
-│ - isbn : string                 │
-│ - preco : decimal               │
-│ - quantidadeEstoque : int       │
-│ - categoria : string            │
-│ - editora : string              │
-│ - anoPublicacao : int           │
-│ - dataUltimaAtualizacao : DateTime│
-│ - ativo : boolean               │
-│ - sinopse : string              │
-├─────────────────────────────────┤
-│ + CreateLivro() : Response      │
-│ + ReadLivro() : List<Livro>     │
-│ + ReadByIdLivro() : Livro       │
-│ + ReadByTituloLivro() : List    │
-│ + ReadByAutorLivro() : List     │
-│ + ReadByCategoriaLivro() : List │
-│ + ReadEstoqueBaixoLivro() : List│
-│ + UpdateLivro() : Response      │
-│ + UpdateEstoqueLivro() : Response│
-│ + DeleteLivro() : Response      │
-│ + validarISBN() : boolean       │
-│ + validarPreco() : boolean      │
-│ + validarAnoPublicacao() : boolean│
-│ + atualizarEstoque() : boolean  │
-│ + verificarDisponibilidade() : boolean│
-│ + calcularValorEstoque() : decimal│
-│ + obterNivelEstoque() : string  │
-│ + aplicarDesconto() : decimal   │
-│ + gerarEtiqueta() : string      │
-└─────────────────────────────────┘
+```
+┌─────────────┐       1      ┌─────────────┐       *      ┌─────────────┐
+│   Cliente   │──────────────│    Venda    │──────────────│  ItemVenda  │
+└─────────────┘              └─────────────┘              └─────────────┘
+                                                                   │
+                                                                   │ *
+                                                                   │
+                                                                   │ 1
+                                                           ┌─────────────┐
+                                                           │    Livro    │
+                                                           └─────────────┘
+                                                                   │
+                                                                   │ *
+                                                                   │
+                                                                   │ 1
+                                                           ┌─────────────┐
+                                                           │  Categoria  │
+                                                           └─────────────┘
+```
 
-┌─────────────────────────────────┐
-│              Venda              │
-├─────────────────────────────────┤
-│ - id : int                      │
-│ - clienteId : int               │
-│ - dataVenda : DateTime          │
-│ - valorTotal : decimal          │
-│ - formaPagamento : string       │
-│ - status : string               │
-│ - observacoes : string          │
-├─────────────────────────────────┤
-│ + CreateVenda() : Response      │
-│ + ReadVenda() : List<Venda>     │
-│ + ReadByIdVenda() : Venda       │
-│ + ReadByClienteIdVenda() : List │
-│ + ReadByStatusVenda() : List    │
-│ + ReadByPeriodoVenda() : List   │
-│ + UpdateVenda() : Response      │
-│ + ConfirmarVenda() : Response   │
-│ + CancelarVenda() : Response    │
-│ + DeleteVenda() : Response      │
-│ + RelatorioVendas() : Relatorio │
-│ + validarFormaPagamento() : boolean│
-│ + validarStatus() : boolean     │
-│ + calcularTotal() : decimal     │
-│ + adicionarItem() : boolean     │
-│ + removerItem() : boolean       │
-│ + confirmar() : boolean         │
-│ + cancelar() : boolean          │
-│ + estornar() : boolean          │
-│ + gerarComprovante() : string   │
-│ + enviarEmailConfirmacao() : boolean│
-└─────────────────────────────────┘
+Símbolos de Relacionamento:
+---
+│ = Linha de associação
 
-┌─────────────────────────────────┐
-│            ItemVenda            │
-├─────────────────────────────────┤
-│ - id : int                      │
-│ - vendaId : int                 │
-│ - livroId : int                 │
-│ - quantidade : int              │
-│ - precoUnitario : decimal       │
-│ - subtotal : decimal            │
-│ - desconto : decimal            │
-├─────────────────────────────────┤
-│ + CreateItemVenda() : Response  │
-│ + ReadItemVenda() : List        │
-│ + ReadByIdItemVenda() : ItemVenda│
-│ + ReadByVendaIdItemVenda() : List│
-│ + ReadByLivroIdItemVenda() : List│
-│ + UpdateItemVenda() : Response  │
-│ + DeleteItemVenda() : Response  │
-│ + calcularSubtotal() : decimal  │
-│ + validarQuantidade() : boolean │
-│ + aplicarDesconto() : void      │
-│ + obterTotal() : decimal        │
-└─────────────────────────────────┘
+"*" = Muitos (zero ou mais)
+  
+1 = Um (exatamente um)
+```
 
-### Relacionamentos Entre Classes
-
-Cliente ──────────┐
-    │ 1           │
-    │             │ *
-    │         ┌───▼────┐
-    │         │  Venda │
-    │         └───┬────┘
-    │             │ 1
-    │             │
-    │             │ *
-    │         ┌───▼─────────┐
-    │         │  ItemVenda  │
-    │         └───┬─────────┘
-    │             │ *
-    │             │
-    │             │ 1
-    │         ┌───▼────┐
-    │         │  Livro │
-    └─────────┼────────┘
-              │ *
-              │
-              │ 1
-         ┌────▼──────┐
-         │ Categoria │
-         └───────────┘
-
-Legenda:
-1   = Um
-*   = Muitos
-──  = Relacionamento
 ---
 
 ## 🔄 Fluxos de Uso
