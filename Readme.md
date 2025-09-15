@@ -87,115 +87,178 @@ graph TD
 
 ### Diagrama de Classes Completo
 
-```mermaid
-classDiagram
-    class Cliente {
-        +int id
-        +string nome
-        +string email
-        +string telefone
-        +string cpf
-        +string endereco
-        +time.Time dataNascimento
-        +time.Time dataCadastro
-        +bool ativo
-    }
+┌─────────────────────────────────┐
+│            Categoria            │
+├─────────────────────────────────┤
+│ - id : int                      │
+│ - nome : string                 │
+├─────────────────────────────────┤
+│ + CreateCategoria() : Response  │
+│ + ReadCategoria() : List        │
+│ + ReadByIdCategoria() : Category│
+│ + ReadByNomeCategoria() : List  │
+│ + UpdateCategoria() : Response  │
+│ + DeleteCategoria() : Response  │
+│ + validarNome() : boolean       │
+│ + obterLivros() : List<Livro>   │
+│ + contarLivros() : int          │
+└─────────────────────────────────┘
 
-    class Categoria {
-        +int id
-        +string nome
-    }
+┌─────────────────────────────────┐
+│              Cliente            │
+├─────────────────────────────────┤
+│ - id : int                      │
+│ - nome : string                 │
+│ - email : string                │
+│ - telefone : string             │
+│ - cpf : string                  │
+│ - endereco : string             │
+│ - dataNascimento : Date         │
+│ - dataCadastro : DateTime       │
+│ - ativo : boolean               │
+├─────────────────────────────────┤
+│ + Create() : Response           │
+│ + Read() : List<Cliente>        │
+│ + ReadById() : Cliente          │
+│ + ReadByNome() : List<Cliente>  │
+│ + Update() : Response           │
+│ + Delete() : Response           │
+│ + validarCPF() : boolean        │
+│ + validarEmail() : boolean      │
+│ + calcularIdade() : int         │
+│ + formatarCPF() : string        │
+│ + ativar() : void               │
+│ + desativar() : void            │
+│ + obterHistoricoCompras() : List│
+│ + calcularTicketMedio() : decimal│
+└─────────────────────────────────┘
 
-    class Livro {
-        +int id
-        +string titulo
-        +string autor
-        +string isbn
-        +decimal.Decimal preco
-        +int quantidadeEstoque
-        +string categoria
-        +string editora
-        +int anoPublicacao
-        +time.Time dataUltimaAtualizacao
-        +bool ativo
-    }
+┌─────────────────────────────────┐
+│              Livro              │
+├─────────────────────────────────┤
+│ - id : int                      │
+│ - titulo : string               │
+│ - autor : string                │
+│ - isbn : string                 │
+│ - preco : decimal               │
+│ - quantidadeEstoque : int       │
+│ - categoria : string            │
+│ - editora : string              │
+│ - anoPublicacao : int           │
+│ - dataUltimaAtualizacao : DateTime│
+│ - ativo : boolean               │
+│ - sinopse : string              │
+├─────────────────────────────────┤
+│ + CreateLivro() : Response      │
+│ + ReadLivro() : List<Livro>     │
+│ + ReadByIdLivro() : Livro       │
+│ + ReadByTituloLivro() : List    │
+│ + ReadByAutorLivro() : List     │
+│ + ReadByCategoriaLivro() : List │
+│ + ReadEstoqueBaixoLivro() : List│
+│ + UpdateLivro() : Response      │
+│ + UpdateEstoqueLivro() : Response│
+│ + DeleteLivro() : Response      │
+│ + validarISBN() : boolean       │
+│ + validarPreco() : boolean      │
+│ + validarAnoPublicacao() : boolean│
+│ + atualizarEstoque() : boolean  │
+│ + verificarDisponibilidade() : boolean│
+│ + calcularValorEstoque() : decimal│
+│ + obterNivelEstoque() : string  │
+│ + aplicarDesconto() : decimal   │
+│ + gerarEtiqueta() : string      │
+└─────────────────────────────────┘
 
-    class Venda {
-        +int id
-        +int clienteId
-        +time.Time dataVenda
-        +decimal.Decimal valorTotal
-        +string formaPagamento
-        +string status
-        +string observacoes
-    }
+┌─────────────────────────────────┐
+│              Venda              │
+├─────────────────────────────────┤
+│ - id : int                      │
+│ - clienteId : int               │
+│ - dataVenda : DateTime          │
+│ - valorTotal : decimal          │
+│ - formaPagamento : string       │
+│ - status : string               │
+│ - observacoes : string          │
+├─────────────────────────────────┤
+│ + CreateVenda() : Response      │
+│ + ReadVenda() : List<Venda>     │
+│ + ReadByIdVenda() : Venda       │
+│ + ReadByClienteIdVenda() : List │
+│ + ReadByStatusVenda() : List    │
+│ + ReadByPeriodoVenda() : List   │
+│ + UpdateVenda() : Response      │
+│ + ConfirmarVenda() : Response   │
+│ + CancelarVenda() : Response    │
+│ + DeleteVenda() : Response      │
+│ + RelatorioVendas() : Relatorio │
+│ + validarFormaPagamento() : boolean│
+│ + validarStatus() : boolean     │
+│ + calcularTotal() : decimal     │
+│ + adicionarItem() : boolean     │
+│ + removerItem() : boolean       │
+│ + confirmar() : boolean         │
+│ + cancelar() : boolean          │
+│ + estornar() : boolean          │
+│ + gerarComprovante() : string   │
+│ + enviarEmailConfirmacao() : boolean│
+└─────────────────────────────────┘
 
-    class ItemVenda {
-        +int id
-        +int vendaId
-        +int livroId
-        +int quantidade
-        +decimal.Decimal precoUnitario
-        +decimal.Decimal subtotal
-        +decimal.Decimal desconto
-    }
+┌─────────────────────────────────┐
+│            ItemVenda            │
+├─────────────────────────────────┤
+│ - id : int                      │
+│ - vendaId : int                 │
+│ - livroId : int                 │
+│ - quantidade : int              │
+│ - precoUnitario : decimal       │
+│ - subtotal : decimal            │
+│ - desconto : decimal            │
+├─────────────────────────────────┤
+│ + CreateItemVenda() : Response  │
+│ + ReadItemVenda() : List        │
+│ + ReadByIdItemVenda() : ItemVenda│
+│ + ReadByVendaIdItemVenda() : List│
+│ + ReadByLivroIdItemVenda() : List│
+│ + UpdateItemVenda() : Response  │
+│ + DeleteItemVenda() : Response  │
+│ + calcularSubtotal() : decimal  │
+│ + validarQuantidade() : boolean │
+│ + aplicarDesconto() : void      │
+│ + obterTotal() : decimal        │
+└─────────────────────────────────┘
 
-    class ClienteController {
-        +Create()
-        +Read()
-        +ReadById()
-        +ReadByNome()
-        +Update()
-        +Delete()
-    }
+### Relacionamentos Entre Classes
 
-    class LivroController {
-        +CreateLivro()
-        +ReadLivro()
-        +ReadByIdLivro()
-        +ReadByTituloLivro()
-        +ReadByAutorLivro()
-        +ReadByCategoriaLivro()
-        +ReadEstoqueBaixoLivro()
-        +UpdateLivro()
-        +UpdateEstoqueLivro()
-        +DeleteLivro()
-    }
+Cliente ──────────┐
+    │ 1           │
+    │             │ *
+    │         ┌───▼────┐
+    │         │  Venda │
+    │         └───┬────┘
+    │             │ 1
+    │             │
+    │             │ *
+    │         ┌───▼─────────┐
+    │         │  ItemVenda  │
+    │         └───┬─────────┘
+    │             │ *
+    │             │
+    │             │ 1
+    │         ┌───▼────┐
+    │         │  Livro │
+    └─────────┼────────┘
+              │ *
+              │
+              │ 1
+         ┌────▼──────┐
+         │ Categoria │
+         └───────────┘
 
-    class VendaController {
-        +CreateVenda()
-        +ReadVenda()
-        +ReadByIdVenda()
-        +ReadByClienteIdVenda()
-        +ReadByStatusVenda()
-        +ReadByPeriodoVenda()
-        +UpdateVenda()
-        +ConfirmarVenda()
-        +CancelarVenda()
-        +DeleteVenda()
-        +RelatorioVendas()
-    }
-
-    class ItemVendaController {
-        +CreateItemVenda()
-        +ReadItemVenda()
-        +ReadByIdItemVenda()
-        +ReadByVendaIdItemVenda()
-        +ReadByLivroIdItemVenda()
-        +UpdateItemVenda()
-        +DeleteItemVenda()
-    }
-
-    Cliente ||--o{ Venda
-    Venda ||--o{ ItemVenda
-    Livro ||--o{ ItemVenda
-    
-    ClienteController --> Cliente
-    LivroController --> Livro
-    VendaController --> Venda
-    ItemVendaController --> ItemVenda
-```
-
+Legenda:
+1   = Um
+*   = Muitos
+──  = Relacionamento
 ---
 
 ## 🔄 Fluxos de Uso
