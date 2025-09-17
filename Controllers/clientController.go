@@ -136,7 +136,9 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Server failed to handler = ", err)
 		return
 	}
+
 	c.DataCadastro = time.Now()
+
 	t, err := time.Parse("2006-01-02", c.DataNascimento)
 	if err != nil {
 		fmt.Println("Erro ao converter data:", err)

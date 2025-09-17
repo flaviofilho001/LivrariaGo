@@ -1,11 +1,13 @@
--- Limpar tabelas existentes se necessário (descomente se precisar)
+-- Caso tenha rodado o docker ou o bd mesmo antes dessa versão final utiliza esses  comandos sql abaixo
 -- DROP TABLE IF EXISTS itens_venda CASCADE;
 -- DROP TABLE IF EXISTS vendas CASCADE;
 -- DROP TABLE IF EXISTS livros CASCADE;
 -- DROP TABLE IF EXISTS clientes CASCADE;
 -- DROP TABLE IF EXISTS categorias CASCADE;
 
--- Tabela de Clientes (corrigida para snake_case)
+
+-- se for rodar direto no teu postgres baixado no pc tu cria um banco "livraria" e dentro dele tu bota esses comandos sql abaixo
+
 CREATE TABLE IF NOT EXISTS clientes (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(100) NOT NULL,
@@ -164,22 +166,4 @@ INSERT INTO itens_venda (venda_id, livro_id, quantidade, preco_unitario, descont
 (5, 9, 1, 39.90, 15)    -- Mindset com 15% desconto
 ON CONFLICT DO NOTHING;
 
-
-
--- ========================================
--- COMENTÁRIOS FINAIS
--- ========================================
-
--- Para habilitar o controle automático de estoque, descomente o trigger acima
--- Para testar as funções, execute algumas operações de CRUD
--- As views criadas facilitam a geração de relatórios
--- Os índices otimizam as consultas mais frequentes
-
-COMMENT ON TABLE clientes IS 'Tabela de cadastro de clientes da livraria';
-COMMENT ON TABLE categorias IS 'Tabela de categorias de livros';
-COMMENT ON TABLE livros IS 'Tabela de estoque de livros';
-COMMENT ON TABLE vendas IS 'Tabela de registro de vendas';
-COMMENT ON TABLE itens_venda IS 'Tabela de itens individuais de cada venda';
-
--- Finalizar transação
 COMMIT;

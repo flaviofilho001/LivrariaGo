@@ -5,13 +5,13 @@ import (
 )
 
 type Cliente struct {
-	Id             int
-	Nome           string
-	Email          string
-	Telefone       string
-	Cpf            string
-	Endereco       string
-	DataNascimento string
-	DataCadastro   time.Time
-	Ativo          bool
+	Id             int       `json:"id"`
+	Nome           string    `json:"nome"`
+	Email          string    `json:"email"`
+	Telefone       string    `json:"telefone"`
+	Cpf            string    `json:"cpf"`
+	Endereco       string    `json:"endereco"`
+	DataNascimento string    `json:"datanascimento"`
+	DataCadastro   time.Time `json:"datacadastro"`
+	Ativo          bool      `json:"ativo"`
 }
