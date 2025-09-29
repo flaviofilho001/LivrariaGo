@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Categorias</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Categorias</h1>
+
+  <form id="createCategoriaForm">
+    <h2>Cadastrar Categoria</h2>
+    <input type="text" id="nome" placeholder="Nome da categoria" required>
+    <button type="submit">Criar</button>
+  </form>
+
+  <h2>Lista de Categorias</h2>
+  <button onclick="loadCategorias()">Atualizar Lista</button>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="categoriasTable"></tbody>
+  </table>
+
+  <script src="js/categorias.js"></script>
+</body>
+</html>

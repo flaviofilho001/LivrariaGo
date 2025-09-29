@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Itens de Venda</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Itens de Venda</h1>
+
+  <form id="createItemVendaForm">
+    <h2>Cadastrar Item de Venda</h2>
+    <input type="number" id="venda_id" placeholder="ID da Venda" required>
+    <input type="number" id="livro_id" placeholder="ID do Livro" required>
+    <input type="number" id="quantidade" placeholder="Quantidade" required>
+    <input type="number" step="0.01" id="preco_unitario" placeholder="Preço Unitário" required>
+    <input type="number" step="0.01" id="desconto" placeholder="Desconto">
+    <button type="submit">Criar</button>
+  </form>
+
+  <h2>Lista de Itens de Venda</h2>
+  <button onclick="loadItensVenda()">Atualizar Lista</button>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Venda</th>
+        <th>Livro</th>
+        <th>Quantidade</th>
+        <th>Preço Unitário</th>
+        <th>Subtotal</th>
+        <th>Desconto</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="itensVendaTable"></tbody>
+  </table>
+
+  <script src="js/itensvenda.js"></script>
+</body>
+</html>

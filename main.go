@@ -65,6 +65,10 @@ func main() {
 
 	fmt.Println("Your connection in server 8080 was sucessfull")
 
+	fs := http.FileServer(http.Dir("./public"))
+	http.Handle("/", fs)
+
+	fmt.Println("Rodando o site")
 	http.ListenAndServe(":8080", nil)
 
 }
